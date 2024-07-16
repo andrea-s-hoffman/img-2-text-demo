@@ -14,7 +14,7 @@ const ImageUploader = () => {
     const files = fileInputRef.current?.files;
     if (files && files[0]) {
       const newImage = files[0];
-      const storageRef = ref(storage, newImage.name + new Date());
+      const storageRef = ref(storage, "image-" + new Date().getTime() + ".jpg");
       uploadBytes(storageRef, newImage).then((uploadRes) => {
         getDownloadURL(uploadRes.ref).then((url) => {
           console.log(url);
