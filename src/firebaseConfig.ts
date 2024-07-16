@@ -36,7 +36,7 @@ export const checkText = async (fileName: string): Promise<string> => {
   const q = query(collection(db, "extractedText"));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    if (doc.data().file.includes(fileName)) {
+    if (doc?.data()?.file?.includes(fileName)) {
       result = doc.data().text;
     }
   });
