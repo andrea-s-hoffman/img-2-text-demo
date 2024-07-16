@@ -1,12 +1,12 @@
 # Image to Text Demo
 
-## 1. Set up Hosting in Frontend, Authentication and Cloud Storage all with Firebase.
+## 1. Set up Hosting, Authentication and Cloud Storage all with Firebase
 
-## 4. Install Firebase Extension
+## 2. Install Firebase Extension
 
 - [Extract Image Text with Cloud Vision AI](https://extensions.dev/extensions/googlecloud/storage-extract-image-text)
 
-## 5. Enable Firebase Firestore
+## 3. Enable Firebase Firestore
 
 - Ensure there is a collection named `extractedText`.
 - Delete the auto-generated document in this collection.
