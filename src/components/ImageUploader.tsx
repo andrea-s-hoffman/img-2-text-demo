@@ -21,13 +21,9 @@ const ImageUploader = () => {
           console.log(url);
           setTimeout(async () => {
             const res = await checkText(uploadRes.ref.name);
-            if (res === "not found") {
-              setTextFromImg(await checkText(uploadRes.ref.name));
-              setLoading(false);
-            } else {
-              setTextFromImg("please try again");
-              setLoading(false);
-            }
+            console.log(res, uploadRes.ref.name);
+            setTextFromImg(res);
+            setLoading(false);
           }, 5000);
         });
       });
