@@ -1,7 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { collection, getDocs, getFirestore, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getFirestore,
+  query,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -35,10 +42,20 @@ export const checkText = async (fileName: string): Promise<string> => {
   let result = "not found";
   const q = query(collection(db, "extractedText"));
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    if (doc?.data()?.file?.includes(fileName)) {
-      result = doc.data().text;
+  querySnapshot.forEach((d) => {
+    if (d?.data()?.file?.includes(fileName)) {
+      result = d.data().text;
+      // delete from database
+      const docRef = doc(db, "extractedText", d.id);
+      deleteDoc(docRef)
+        .then(() => {
+          console.log("Entire Document has been deleted successfully.");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   });
+
   return result;
 };
