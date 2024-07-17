@@ -1,3 +1,5 @@
+import { DocumentProcessorServiceClient } from "@google-cloud/documentai";
+
 /**
  * TODO(developer): Uncomment these variables before running the sample.
  */
@@ -6,12 +8,12 @@ const location = "us"; // Format is 'us' or 'eu'
 const processorId = "f5aa97f40b9ed729"; // Create processor in Cloud Console
 // const filePath = '/path/to/local/pdf';
 
-import { DocumentProcessorServiceClient } from "@google-cloud/documentai";
-
 // Instantiates a client
+// apiEndpoint regions available: eu-documentai.googleapis.com, us-documentai.googleapis.com (Required if using eu based processor)
+// const client = new DocumentProcessorServiceClient({apiEndpoint: 'eu-documentai.googleapis.com'});
 const client = new DocumentProcessorServiceClient();
 
-async function processDocument(imageFile: File): Promise<void> {
+async function quickstart(image: File) {
   // The full resource name of the processor, e.g.:
   // projects/project-id/locations/location/processor/processor-id
   // You must create new processors in the Cloud Console first
@@ -19,10 +21,10 @@ async function processDocument(imageFile: File): Promise<void> {
 
   // Read the file into memory.
   const fs = require("fs").promises;
-  const readImg = await fs.readFile(imageFile);
+  const imageFile = await fs.readFile(image);
 
   // Convert the image data to a Buffer and base64 encode it.
-  const encodedImage = Buffer.from(readImg).toString("base64");
+  const encodedImage = Buffer.from(imageFile).toString("base64");
 
   const request = {
     name,
@@ -37,7 +39,7 @@ async function processDocument(imageFile: File): Promise<void> {
   const { document } = result;
 
   // Get all of the document text as one big string
-  const { text } = document as any;
+  const { text } = document!;
 
   // Extract shards from the text field
   const getText = (textAnchor: { textSegments: string | any[] }) => {
@@ -49,32 +51,18 @@ async function processDocument(imageFile: File): Promise<void> {
     const startIndex = textAnchor.textSegments[0].startIndex || 0;
     const endIndex = textAnchor.textSegments[0].endIndex;
 
-    return text.substring(startIndex, endIndex);
+    return text?.substring(startIndex, endIndex);
   };
 
   // Read the text recognition output from the processor
   console.log("The document contains the following paragraphs:");
-  const [page1] = document?.pages as any;
+  const [page1] = document?.pages!;
   const { paragraphs } = page1;
 
-  for (const paragraph of paragraphs) {
-    const paragraphText = getText(paragraph.layout.textAnchor);
+  for (const paragraph of paragraphs!) {
+    const paragraphText = getText(paragraph?.layout?.textAnchor as any);
     console.log(`Paragraph text:\n${paragraphText}`);
-  }
-
-  // Form parsing provides additional output about
-  // form-formatted PDFs. You  must create a form
-  // processor in the Cloud Console to see full field details.
-  console.log("\nThe following form key/value pairs were detected:");
-
-  const { formFields } = page1;
-  for (const field of formFields) {
-    const fieldName = getText(field.fieldName.textAnchor);
-    const fieldValue = getText(field.fieldValue.textAnchor);
-
-    console.log("Extracted key value pair:");
-    console.log(`\t(${fieldName}, ${fieldValue})`);
   }
 }
 
-export default processDocument;
+export default quickstart;

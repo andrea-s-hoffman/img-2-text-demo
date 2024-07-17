@@ -1,7 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { checkText, storage } from "../firebaseConfig";
-import processDocument from "../services/textProcessorService";
+import quickstart from "../services/textProcessorService";
 
 const ImageUploader = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -20,11 +20,12 @@ const ImageUploader = () => {
         getDownloadURL(uploadRes.ref).then((url) => {
           console.log(url);
           setTimeout(async () => {
-            setTextFromImg(await checkText(uploadRes.ref.name));
-            if (textFromImg === "not found") {
+            const res = await checkText(uploadRes.ref.name);
+            if (res === "not found") {
               setTextFromImg(await checkText(uploadRes.ref.name));
               setLoading(false);
             } else {
+              setTextFromImg("please try again");
               setLoading(false);
             }
           }, 5000);
