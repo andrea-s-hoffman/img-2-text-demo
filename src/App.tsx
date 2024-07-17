@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import ImageUploader from "./components/ImageUploader";
 import UserContext from "./context/UserContext";
 import { signInWithGoogle, signOutOfGoogle } from "./firebaseConfig";
+import AddFoodFlow from "./components/AddFoodFlow";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -21,7 +21,7 @@ function App() {
           <button onClick={signInWithGoogle}>Log in</button>
         )}
       </header>
-      <main>{user ? <ImageUploader /> : <p>Log in to upload an image</p>}</main>
+      <main>{user ? <AddFoodFlow /> : <p>Log in to upload an image</p>}</main>
     </>
   );
 }

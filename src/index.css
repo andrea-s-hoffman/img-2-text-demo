@@ -5,6 +5,11 @@ main {
   padding: 20px;
 }
 
+.NutritionForm {
+  display: flex;
+  flex-direction: column;
+}
+
 .progress-bar {
   width: calc(100% - 6px);
   height: 5px;

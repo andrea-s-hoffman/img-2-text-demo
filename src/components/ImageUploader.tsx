@@ -6,8 +6,14 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { checkText, storage } from "../firebaseConfig";
+import nutritionParser from "../services/nutritionParser";
+import NutritionalInfo from "../models/NutritionalInfo";
 
-const ImageUploader = () => {
+interface Props {
+  onComplete: (data: NutritionalInfo) => void;
+}
+
+const ImageUploader = ({ onComplete }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [textFromImg, setTextFromImg] = useState("");
@@ -30,8 +36,9 @@ const ImageUploader = () => {
           document.querySelector(".progress-bar-fill")?.classList.add("end");
           setTimeout(async () => {
             const res = await checkText(uploadRes.ref.name);
-            console.log(res, uploadRes.ref.name);
+            // console.log(res, uploadRes.ref.name);
             setTextFromImg(res);
+
             setLoading(false);
             // delete from storage
             deleteObject(uploadRes.ref)
@@ -41,6 +48,7 @@ const ImageUploader = () => {
               .catch((err) => {
                 console.log("error deleting:", err);
               });
+            onComplete(nutritionParser(res));
           }, 5000);
         });
       });
