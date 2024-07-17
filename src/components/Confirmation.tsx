@@ -15,6 +15,10 @@ const Confirmation = ({ dataFromDB, nutrition, onComplete }: Props) => {
       <p>Protein: {nutrition.amountPerServing.proteinG}g</p>
       <p>Carbs: {nutrition.amountPerServing.carbsG}g</p>
       <p>Total Fat: {nutrition.amountPerServing.totalFatG}g</p>
+      <p> - Saturated Fat: {nutrition.amountPerServing.saturatedFatG}g</p>
+      <p>Cholesterol: {nutrition.amountPerServing.cholesterolMg}mg</p>
+      <p>Sugar: {nutrition.amountPerServing.sugarsG}g</p>
+      <p>Sodium: {nutrition.amountPerServing.sugarsG}mg</p>
       <button onClick={() => onComplete()}>Submit Another</button>
       <button onClick={() => onComplete(true)}>Back</button>
     </div>

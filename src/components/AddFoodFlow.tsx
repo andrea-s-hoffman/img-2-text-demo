@@ -39,7 +39,13 @@ const AddFoodFlow = () => {
   };
 
   const step3Complete = (back: boolean = false) => {
-    setStep(back ? 1 : 0);
+    if (back) {
+      setStep(1);
+    } else {
+      setDataFromDB("");
+      setNutrition(DUMMY_NUTRITION);
+      setStep(0);
+    }
   };
   return (
     <div className="AddFoodFlow">
