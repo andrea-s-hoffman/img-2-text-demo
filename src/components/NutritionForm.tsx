@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import NutritionalInfo from "../models/NutritionalInfo";
 
 interface Props {
@@ -34,7 +34,22 @@ const NutritionForm = ({ nutrition, dataFromDB, onComplete }: Props) => {
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
     if (name && servingSize) {
-      onComplete(nutrition, name);
+      onComplete(
+        {
+          servingSize,
+          amountPerServing: {
+            calories: +calories,
+            totalFatG: +totalFat,
+            saturatedFatG: +saturatedFat,
+            cholesterolMg: +cholesterol,
+            sodiumMg: +sodium,
+            carbsG: +carbs,
+            sugarsG: +sugars,
+            proteinG: +protein,
+          },
+        },
+        name
+      );
     }
   };
 
