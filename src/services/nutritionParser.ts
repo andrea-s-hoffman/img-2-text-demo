@@ -2,11 +2,12 @@ import NutritionalInfo from "../models/NutritionalInfo";
 import { sampleData } from "./sampleData";
 
 function nutritionParser(input: string): NutritionalInfo {
-  const servingSizeMatch = input.match(/Serving Size\s+([^()]+)\s+\(([^)]+)\)/);
+  const servingSizeMatch = input.match(
+    /Serving Size\s+([^()]+)\s+\(([^)]+)\)/i
+  );
 
-  function extractValue(nutrient: string): number {
-    const regex = new RegExp(`(?:${nutrient})\\s+([^g]+g)`, "i");
-    const match = input.match(regex);
+  function getMatch(r: RegExp): number {
+    const match = input.match(r);
     if (match) {
       if (!Number.isNaN(parseInt(match[1]))) {
         return parseInt(match[1]);
@@ -15,15 +16,14 @@ function nutritionParser(input: string): NutritionalInfo {
     return 0;
   }
 
+  function extractValue(nutrient: string): number {
+    const regex = new RegExp(`(?:${nutrient})\\s+([^g]+g)`, "i");
+    return getMatch(regex);
+  }
+
   function findCalories(): number {
-    const regex = /(\d+)\s*INGREDIENTS/i;
-    const match = input.match(regex);
-    if (match) {
-      if (!Number.isNaN(parseInt(match[1]))) {
-        return parseInt(match[1]);
-      }
-    }
-    return 0;
+    const regex = /calories\s+(\d+)/i;
+    return getMatch(regex);
   }
 
   return {
